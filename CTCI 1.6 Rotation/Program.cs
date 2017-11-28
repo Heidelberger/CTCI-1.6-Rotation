@@ -14,26 +14,37 @@ namespace CTCI_1._6_Rotation
             PrintHeaderMsg(1, 6, "Rotation");
 
             int[,] array2D_4 = new int[4, 4] {{00,01,02,03},{10,11,12,13},{20,21,22,23},{30,31,32,33}};
-
+            int[,] array2D_5 = new int[5, 5] {{00,01,02,03,04},{10,11,12,13,14},{20,21,22,23,24},{30,31,32,33,34},{40,41,42,43,44}};
             int[,] array2D_6 = new int[6, 6] {{00,01,02,03,04,05},{10,11,12,13,14,15},{20,21,22,23,24,25},{30,31,32,33,34,35},{40,41,42,43,44,45},{50,51,52,53,54,55}};
 
             Console.WriteLine("Original:");
             PrintArray(array2D_4);
-
             rotate90_CTCI(array2D_4);
-
             rotate90(array2D_4);
 
             Console.WriteLine("Original:");
+            PrintArray(array2D_5);
+            rotate90_CTCI(array2D_5);
+            rotate90(array2D_5);
+
+            Console.WriteLine("Original:");
             PrintArray(array2D_6);
-
             rotate90_CTCI(array2D_6);
-
             rotate90(array2D_6);
 
             Console.ReadLine();
         }
 
+        /////////////////////////////////////////////////////////////
+        //        
+        // Work in layers from the outside towards the inside. Copy 1 element at a time.
+        //
+        // Complexity: Algorithm runs in O(N)
+        //             Every element is touched twice: once when copying from, and once when copying to.
+        //
+        //             Algorithm requires O(N) space
+        //             All elements are stored in memory once (plus 1 temp value). Edits are in-place.
+        //
         private static void rotate90(int[,] array2D)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -41,14 +52,9 @@ namespace CTCI_1._6_Rotation
             int temp = 0;            
 
             int n = array2D.GetLength(0);
-
-            // add a layer for every odd number of elements. Ie: 1 element  = 1 layer
-            //                                                   2 elements = 1 layer
-            //                                                   3 elements = 2 layers
-            //                                                   4 elements = 2 layers
-            //                                                   5 elements = 3 layers etc
-            for (int layer = 0; layer < (int)Math.Ceiling( n / 2.0); ++layer)
-            {
+          
+            for (int layer = 0; layer < n / 2; ++layer)
+                {
                 // index shrinks from both sides (!) as the layer moves inward
                 for (int index = layer; index < (n - layer - 1); ++index)
                 {
@@ -91,17 +97,14 @@ namespace CTCI_1._6_Rotation
         //        
         // Below is the book's solution.
         //
-        // Complexity: O(N^2)
-        //             The algorithm must touch all N^2 elements, so it's the best we can do
-        //
         private static void rotate90_CTCI(int[,] array2D)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
             int n = array2D.GetLength(0);
-
-            for (int layer = 0; layer < (int)Math.Ceiling(n / 2.0); ++layer)            
-                {
+            
+            for (int layer = 0; layer < n / 2.0; ++layer)
+            {
                 int first = layer;
                 int last = n - 1 - layer;
 
@@ -146,7 +149,6 @@ namespace CTCI_1._6_Rotation
                 }
                 Console.WriteLine();
             }
-
             Console.WriteLine();
         }
 
