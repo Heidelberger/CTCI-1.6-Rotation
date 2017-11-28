@@ -39,7 +39,7 @@ namespace CTCI_1._6_Rotation
         //        
         // Work in layers from the outside towards the inside. Copy 1 element at a time.
         //
-        // Complexity: Algorithm runs in O(N)
+        // Complexity: Algorithm runs in O(N) time
         //             Every element is touched twice: once when copying from, and once when copying to.
         //
         //             Algorithm requires O(N) space
@@ -54,7 +54,7 @@ namespace CTCI_1._6_Rotation
             int n = array2D.GetLength(0);
           
             for (int layer = 0; layer < n / 2; ++layer)
-                {
+            {
                 // index shrinks from both sides (!) as the layer moves inward
                 for (int index = layer; index < (n - layer - 1); ++index)
                 {
