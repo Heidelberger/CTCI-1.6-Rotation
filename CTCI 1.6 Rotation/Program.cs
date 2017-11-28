@@ -44,10 +44,7 @@ namespace CTCI_1._6_Rotation
             Console.WriteLine("Original:");            
             PrintArray(array2D);
 
-            Console.ReadLine();
-
             int temp = 0;
-
             int X_currentposition = 0;
             int Y_currentposition = 0;
             int X_oneLayerBack = 0;
@@ -109,9 +106,6 @@ namespace CTCI_1._6_Rotation
                     }
                 }
             }
-
-
-            Console.ReadLine();
 
             Console.WriteLine();
             Console.WriteLine("Rotated:");
