@@ -12,25 +12,25 @@ namespace CTCI_1._6_Rotation
         {
             PrintHeaderMsg(1, 6, "Rotation");
 
-            int[,] array2D = new int[4, 4] { {1,2,3,4}, {5,6,7,8}, {9,10,11,12}, {13,14,15,16} };
+            int[,] array2D = new int[4, 4] {{00,01,02,03},{10,11,12,13},{20,21,22,23},{30,31,32,33}};
 
-            Console.WriteLine("Original:");
-            Console.WriteLine();
-            PrintArray(array2D);
+            int[,] array2D_6 = new int[6, 6] {{00,01,02,03,04,05},{10,11,12,13,14,15},{20,21,22,23,24,25},{30,31,32,33,34,35},{40,41,42,43,44,45},{50,51,52,53,54,55}};
+            
+            //rotate90(array2D);
 
-            rotate90(array2D);            
+            rotate90(array2D_6);
 
             Console.ReadLine();
         }
 
         private static void PrintArray(int[,] array2D)
         {
-            for (int x = 0; x < array2D.GetLength(0); ++x)
+            for (int y = array2D.GetLength(0) - 1; y >= 0; --y)
             {
-                for (int y = 0; y < array2D.GetLength(0); ++y)
+                for (int x = 0; x < array2D.GetLength(0); ++x)
                 {
                     if (array2D[x, y] < 10)
-                        Console.Write(" ");
+                        Console.Write("0");
 
                     Console.Write(array2D[x, y]);
                     Console.Write(", ");
@@ -41,14 +41,27 @@ namespace CTCI_1._6_Rotation
 
         private static void rotate90(int[,] array2D)
         {
+            Console.WriteLine("Original:");            
+            PrintArray(array2D);
+
+            Console.ReadLine();
+
+            int temp = 0;
+
             int X_currentposition = 0;
             int Y_currentposition = 0;
             int X_oneLayerBack = 0;
             int Y_oneLayerBack = 0;
 
-            for (int layer = 0; layer < array2D.GetLength(0) / 2; ++layer)
+            // add a layer for every odd number of elements. Ie: 1 element  = 1 layer
+            //                                                   2 elements = 1 layer
+            //                                                   3 elements = 2 layers
+            //                                                   4 elements = 2 layers
+            //                                                   5 elements = 3 layers etc
+            for (int layer = 0; layer < (int)Math.Ceiling( array2D.GetLength(0) / 2.0); ++layer)
             {
-                for (int index = layer; index < (array2D.GetLength(0) - layer); ++index)
+                // index shrinks from both sides (!) as the layer moves inward
+                for (int index = layer; index < (array2D.GetLength(0) - layer - 1); ++index)
                 {
                     for (int side = 0; side < 4; ++side)
                     {
@@ -57,54 +70,53 @@ namespace CTCI_1._6_Rotation
                             case 0:                            
                                 X_currentposition = index;
                                 Y_currentposition = layer;
-                                X_oneLayerBack = array2D.GetLength(0) - 1 - index;
-                                Y_oneLayerBack = array2D.GetLength(0) - 1 - layer;
+                                X_oneLayerBack = array2D.GetLength(0) - 1 - layer;
+                                Y_oneLayerBack = index;
 
-                                // write one layer backwards
-                                array2D[X_oneLayerBack, Y_oneLayerBack] = array2D[X_currentposition, Y_currentposition];
-                                break;
+                                temp = array2D[X_currentposition, Y_currentposition];
+                                array2D[X_currentposition, Y_currentposition] = array2D[X_oneLayerBack, Y_oneLayerBack];
+                                break;  
 
                             case 1:                            
                                 X_currentposition = array2D.GetLength(0) - 1 - layer;
                                 Y_currentposition = index;
-                                X_oneLayerBack = index;
-                                Y_oneLayerBack = layer;
+                                X_oneLayerBack = array2D.GetLength(0) - 1 - index;
+                                Y_oneLayerBack = array2D.GetLength(0) - 1 - layer;
 
                                 // write one layer backwards
-                                array2D[X_oneLayerBack, Y_oneLayerBack] = array2D[X_currentposition, Y_currentposition];
+                                array2D[X_currentposition, Y_currentposition] = array2D[X_oneLayerBack, Y_oneLayerBack];
                                 break;
 
                             case 2:                            
-                                X_currentposition = layer;
-                                Y_currentposition = array2D.GetLength(0) - 1 - index;
-                                X_oneLayerBack = array2D.GetLength(0) - 1 - layer;
-                                Y_oneLayerBack = index;
-
-                                // write one layer backwards
-                                array2D[X_oneLayerBack, Y_oneLayerBack] = array2D[X_currentposition, Y_currentposition];
-                                break;
-
-                            case 3:                            
                                 X_currentposition = array2D.GetLength(0) - 1 - index;
                                 Y_currentposition = array2D.GetLength(0) - 1 - layer;
-                                X_oneLayerBack = layer;
+                                X_oneLayerBack = layer; 
                                 Y_oneLayerBack = array2D.GetLength(0) - 1 - index;
 
                                 // write one layer backwards
-                                array2D[X_oneLayerBack, Y_oneLayerBack] = array2D[X_currentposition, Y_currentposition];
+                                array2D[X_currentposition, Y_currentposition] = array2D[X_oneLayerBack, Y_oneLayerBack];
                                 break;
 
+                            case 3:
                             default:
-                                throw new InvalidOperationException("This method can only handle 2-dimensional arrays.");
-                                break;
+                                X_currentposition = layer;
+                                Y_currentposition = array2D.GetLength(0) - 1 - index;
+
+                                // write one layer backwards
+                                array2D[X_currentposition, Y_currentposition] = temp;
+                                break;                                
                         }
                     }
                 }
             }
 
+
+            Console.ReadLine();
+
             Console.WriteLine();
             Console.WriteLine("Rotated:");
             PrintArray(array2D);
+            Console.WriteLine();
         }
 
         private static void PrintHeaderMsg(int chapter, int problem, string title)
