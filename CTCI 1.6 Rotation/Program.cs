@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,53 @@ namespace CTCI_1._6_Rotation
             
             rotate90(array2D);
 
+            rotate90_CTCI(array2D);
+
             rotate90(array2D_6);
 
+            rotate90_CTCI(array2D_6);
+
             Console.ReadLine();
+        }
+
+        private static void rotate90_CTCI(int[,] array2D)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+
+            int n = array2D.GetLength(0);
+
+            for (int layer = 0; layer < (int)Math.Ceiling(n / 2.0); ++layer)            
+                {
+                int first = layer;
+                int last = n - 1 - layer;
+
+                for (int i = first; i < last; ++i)
+                {
+                    int offset = i - first;
+                    
+                    // save top
+                    int top = array2D[first, i];
+
+                    // left -> top
+                    array2D[first, i] = array2D[last - offset, first];
+
+                    // bottom -> left
+                    array2D[last - offset, first] = array2D[last, last - offset];
+
+                    // right -> bottom
+                    array2D[last, last - offset] = array2D[i, last];
+
+                    // top -> right
+                    array2D[i, last] = top;
+                }
+            }
+
+            sw.Stop();
+
+            Console.WriteLine("Rotated (CTCI):");
+            Console.WriteLine(sw.ElapsedTicks + " ticks");
+            PrintArray(array2D);
+            Console.WriteLine();
         }
 
         private static void PrintArray(int[,] array2D)
@@ -37,12 +82,16 @@ namespace CTCI_1._6_Rotation
                 }
                 Console.WriteLine();
             }
+
+            Console.WriteLine();
         }
 
         private static void rotate90(int[,] array2D)
         {
             Console.WriteLine("Original:");            
             PrintArray(array2D);
+
+            Stopwatch sw = Stopwatch.StartNew();
 
             int temp = 0;
             int X_currentposition = 0;
@@ -107,8 +156,11 @@ namespace CTCI_1._6_Rotation
                 }
             }
 
+            sw.Stop();
+
             Console.WriteLine();
-            Console.WriteLine("Rotated:");
+            Console.WriteLine("Rotated (Q):");
+            Console.WriteLine(sw.ElapsedTicks + " ticks");
             PrintArray(array2D);
             Console.WriteLine();
         }
